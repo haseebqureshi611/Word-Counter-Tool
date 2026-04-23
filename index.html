@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Word Counter Tool | Real-time Text Analysis</title>
-    <!-- Google Fonts for clean typography -->
+   
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 (free icons) -->
+   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* style.css - Modern, high contrast & responsive design */
+       
         * {
             margin: 0;
             padding: 0;
@@ -18,7 +18,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #f0f2f5;   /* soft light background */
+            background: #f0f2f5;   
             color: #1e293b;
             line-height: 1.5;
             display: flex;
@@ -26,9 +26,9 @@
             min-height: 100vh;
         }
 
-        /* ========== STICKY HEADER ========== */
+       
         .site-header {
-            background: #0f172a;   /* deep slate / dark contrast */
+            background: #0f172a;  
             color: white;
             padding: 0.9rem 2rem;
             position: sticky;
@@ -93,7 +93,7 @@
             padding: 0 0.5rem;
         }
 
-        /* hero / tool intro */
+       
         .tool-header {
             text-align: center;
             margin-bottom: 2rem;
@@ -114,7 +114,7 @@
             font-size: 1rem;
         }
 
-        /* textarea card */
+        
         .input-card {
             background: white;
             border-radius: 28px;
@@ -144,7 +144,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
 
-        /* stats grid - cards */
+       
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -221,7 +221,7 @@
             color: #1e293b;
         }
 
-        /* button group */
+       
         .button-group {
             display: flex;
             flex-wrap: wrap;
@@ -346,12 +346,12 @@
             <p>Paste or type any text — live word, character, sentence & paragraph analysis</p>
         </div>
 
-        <!-- text input area -->
+       
         <div class="input-card">
             <textarea id="textInput" placeholder="Write or paste your content here...&#10;Lorem ipsum dolor sit amet.&#10;This is a second sentence. How many words?" rows="7"></textarea>
         </div>
 
-        <!-- primary stats cards -->
+       
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-align-left"></i></div>
@@ -380,7 +380,7 @@
             </div>
         </div>
 
-        <!-- extra features: reading time + speaking time + keyword density (simple) -->
+        
         <div class="extra-stats">
             <div class="extra-item">
                 <div class="extra-label"><i class="far fa-clock"></i> Reading time</div>
@@ -414,9 +414,9 @@
     </footer>
 
     <script>
-        // script.js - live word counter with all core & extra features
+        
         (function() {
-            // DOM elements
+           
             const textarea = document.getElementById('textInput');
             const wordSpan = document.getElementById('wordCount');
             const charWithSpaceSpan = document.getElementById('charWithSpace');
@@ -427,67 +427,65 @@
             const speakingSpan = document.getElementById('speakingTime');
             const keywordSpan = document.getElementById('keywordDensity');
 
-            // helper: count words robustly
+           
             function countWords(text) {
                 if (!text.trim()) return 0;
-                // split on whitespace sequences (spaces, newlines, tabs)
+                
                 return text.trim().split(/\s+/).length;
             }
 
-            // count characters with spaces (full length)
+            
             function countCharsWithSpaces(text) {
                 return text.length;
             }
 
-            // count characters without spaces (remove spaces, newlines, tabs)
+            /
             function countCharsWithoutSpaces(text) {
                 return text.replace(/\s+/g, '').length;
             }
 
-            // sentence count: split by ., !, ? and also consider multiple punctuations
+            
             function countSentences(text) {
                 if (!text.trim()) return 0;
-                // regex matches sentence terminators: . ! ? followed by optional whitespace or end
-                // also covers multiple punctuation like "!!!", but each group counts as one boundary.
-                // Simple but robust: split using regex and filter out empty strings
+               
                 const sentences = text.split(/[.!?]+/);
-                // filter empty strings and trim leftovers
+                
                 let validSentences = sentences.filter(s => s.trim().length > 0);
                 return validSentences.length;
             }
 
-            // paragraphs: split by newline characters (multiple newlines count as paragraph separation)
+            
             function countParagraphs(text) {
                 if (!text.trim()) return 0;
-                // split by newline sequences (one or more newlines)
+                
                 let paras = text.split(/\n+/);
-                // filter out any paragraph that is only whitespace or empty
+                
                 paras = paras.filter(para => para.trim().length > 0);
                 return paras.length;
             }
 
-            // reading time: average reading speed ~200-250 words per minute (using 225 wpm)
+          
             function getReadingTime(wordCount) {
                 if (wordCount === 0) return '0 min';
                 const minutes = Math.ceil(wordCount / 225);
                 return `${minutes} min${minutes !== 1 ? '' : ''}`;
             }
 
-            // speaking time: average speaking speed ~130 words per minute => seconds
+            
             function getSpeakingTime(wordCount) {
                 if (wordCount === 0) return '0 sec';
                 const seconds = Math.ceil((wordCount / 130) * 60);
                 return `${seconds} sec`;
             }
 
-            // keyword density: finds most frequent word (excluding common stopwords and short words)
+           
             function getTopKeywordDensity(text) {
                 if (!text.trim()) return '—';
-                // convert to lowercase and extract words (alphanumeric + apostrophe for contractions)
+              
                 const words = text.toLowerCase().match(/\b[\w']+\b/g);
                 if (!words || words.length === 0) return '—';
                 
-                // basic stopwords list (common small words to ignore for meaningful density)
+               
                 const stopwords = new Set([
                     'the', 'and', 'of', 'to', 'a', 'in', 'for', 'is', 'on', 'that', 'by', 'this', 'with', 'i', 'you', 'it',
                     'or', 'are', 'as', 'be', 'at', 'from', 'but', 'not', 'have', 'was', 'we', 'will', 'my', 'an', 'so', 'if',
@@ -497,7 +495,7 @@
                 const freqMap = new Map();
                 let totalFiltered = 0;
                 for (let w of words) {
-                    if (stopwords.has(w) || w.length < 2) continue; // skip short & stop words
+                    if (stopwords.has(w) || w.length < 2) continue; 
                     freqMap.set(w, (freqMap.get(w) || 0) + 1);
                     totalFiltered++;
                 }
@@ -515,35 +513,34 @@
                 return `${maxWord} (${density}%)`;
             }
 
-            // Master update function: computes all metrics based on textarea value
+           
             function updateAllCounts() {
                 const rawText = textarea.value;
-                const text = rawText;   // preserve for other counts
-                
-                // Core counts
+                const text = rawText;   
+               
                 const wordCount = countWords(text);
                 const charWithSpace = countCharsWithSpaces(text);
                 const charWithoutSpace = countCharsWithoutSpaces(text);
                 const sentenceCount = countSentences(text);
                 const paragraphCount = countParagraphs(text);
                 
-                // update core display
+               
                 wordSpan.innerText = wordCount;
                 charWithSpaceSpan.innerText = charWithSpace;
                 charWithoutSpaceSpan.innerText = charWithoutSpace;
                 sentenceSpan.innerText = sentenceCount;
                 paragraphSpan.innerText = paragraphCount;
                 
-                // extra features
+               
                 readingSpan.innerText = getReadingTime(wordCount);
                 speakingSpan.innerText = getSpeakingTime(wordCount);
                 keywordSpan.innerText = getTopKeywordDensity(text);
             }
             
-            // event listeners: live update on input
+           
             textarea.addEventListener('input', updateAllCounts);
             
-            // Clear button functionality
+           
             const clearBtn = document.getElementById('clearBtn');
             clearBtn.addEventListener('click', () => {
                 textarea.value = '';
@@ -551,12 +548,12 @@
                 textarea.focus();
             });
             
-            // Copy text button: copy the textarea content to clipboard
+           
             const copyBtn = document.getElementById('copyBtn');
             copyBtn.addEventListener('click', async () => {
                 const textToCopy = textarea.value;
                 if (!textToCopy) {
-                    // subtle visual feedback
+                   
                     copyBtn.style.transform = 'scale(0.96)';
                     setTimeout(() => { copyBtn.style.transform = ''; }, 150);
                     alert('Nothing to copy! Please enter some text.');
@@ -564,7 +561,7 @@
                 }
                 try {
                     await navigator.clipboard.writeText(textToCopy);
-                    // give visual feedback
+                   
                     const originalText = copyBtn.innerHTML;
                     copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
                     setTimeout(() => {
@@ -575,11 +572,10 @@
                 }
             });
             
-            // initial update for empty textarea (graceful zeros & fallback)
+           
             updateAllCounts();
             
-            // optional: handle extra sentence edge cases if needed, but regex works fine.
-            // also improve paragraph detection: if user hits multiple newlines it works great.
+      
         })();
     </script>
 </body>
